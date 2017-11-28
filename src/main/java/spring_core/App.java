@@ -3,13 +3,13 @@ package spring_core;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import spring_core.beans.Client;
-import spring_core.loggers.ConsoleEventLogger;
+import spring_core.loggers.ConsoleLogger;
 
 public class App {
     private Client client;
-    private ConsoleEventLogger eventLogger;
+    private ConsoleLogger eventLogger;
 
-    public App(Client client, ConsoleEventLogger eventLogger) {
+    public App(Client client, ConsoleLogger eventLogger) {
         this.client = client;
         this.eventLogger = eventLogger;
     }

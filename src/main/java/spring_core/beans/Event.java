@@ -9,11 +9,10 @@ public class Event {
     private Date date;
     private DateFormat df;
 
-    public Event(Date date, DateFormat df) {
+    public Event(Date date) {
         this.id = (int)(Math.random()*1_000_000);
         this.date = date;
-        this.df = df;
-    }
+       }
 
     public void setMsg(String msg) {
         this.msg = msg;
