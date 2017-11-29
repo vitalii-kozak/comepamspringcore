@@ -1,6 +1,7 @@
 package spring_core.beans;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Event {
@@ -9,9 +10,10 @@ public class Event {
     private Date date;
     private DateFormat df;
 
-    public Event(Date date) {
+    public Event(Date date, DateFormat df) {
         this.id = (int)(Math.random()*1_000_000);
         this.date = date;
+        this.df = df;
        }
 
     public void setMsg(String msg) {

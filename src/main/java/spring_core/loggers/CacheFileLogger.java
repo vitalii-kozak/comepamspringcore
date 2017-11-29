@@ -1,6 +1,8 @@
 package spring_core.loggers;
 
+import org.apache.commons.io.FileUtils;
 import spring_core.beans.Event;
+import spring_core.exeptions.FileReadExeption;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,7 +12,8 @@ public class CacheFileLogger extends FileLogger {
     private int cacheSize;
     List<Event> cache = new ArrayList<>();
 
-    public CacheFileLogger(int cacheSize) {
+    public CacheFileLogger(String fileName, int cacheSize) {
+        super(fileName);
         this.cacheSize = cacheSize;
     }
 
@@ -23,9 +26,18 @@ public class CacheFileLogger extends FileLogger {
         }
     }
 
-    public void destroy() {
+    private void writeEventsFromCache() throws  IOException{
+        for (Event event : cache
+             ) {
+            FileUtils.writeStringToFile(file, event.toString(), true);
+        }
+
+    }
+
+    public void destroy() throws  IOException{
         if (!cache.isEmpty()) {
             writeEventsFromCache();
         }
     }
+
 }

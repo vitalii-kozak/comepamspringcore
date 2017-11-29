@@ -16,10 +16,14 @@ public class FileLogger implements EventLogger{
 
     public FileLogger(String fileName) {
         this.fileName = fileName;
-    }
+}
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getFileName() {
+        return fileName;
     }
 
     public void setFile(File file) {
@@ -31,10 +35,9 @@ public class FileLogger implements EventLogger{
         FileUtils.writeStringToFile(file, event.toString(), true);
     }
 
-    public void init() throws IOException, FileReadExeption {
+    public void init() throws IOException{
         this.file = new File(fileName);
-        if (!file.canWrite()) {
-            throw new FileReadExeption("Cant read file");
-        }
+        file.canWrite();
     }
+
 }
