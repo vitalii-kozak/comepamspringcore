@@ -1,6 +1,7 @@
 package spring_core;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import spring_core.beans.Client;
@@ -15,11 +16,13 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class App {
     private Client client;
     private EventLogger eventLogger;
     Map<EventType, EventLogger> loggers;
+    private static ConfigurableApplicationContext ctx;
 
     public App(Client client, EventLogger eventLogger, Map<EventType, EventLogger> loggers) {
         this.client = client;
@@ -32,7 +35,8 @@ public class App {
         if (logger == null) {
             logger = eventLogger;
         }
-        Event event = new Event(new Date(), new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"));
+        Event event = (Event) ctx.getBean("event");
+
         String message = msg.replaceAll(client.getId(),client.getFullName());
         event.setMsg(message);
         logger.logEvent(event);
@@ -43,25 +47,37 @@ public class App {
         //ApplicationContext parent = new ClassPathXmlApplicationContext("spring.xml");
         //ApplicationContext child = new ClassPathXmlApplicationContext( "spring.xml", parent);
 
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring.xml");
+        ctx =  new ClassPathXmlApplicationContext("spring.xml");
 
         App app = (App) ctx.getBean("app");
 
         try {
             app.logEvent(EventType.ERROR, "Some event for 1");
+            TimeUnit.SECONDS.sleep(1);
             app.logEvent(EventType.INFO,"Some event for 2");
+            TimeUnit.SECONDS.sleep(1);
             app.logEvent(EventType.ERROR,"Some event for 3");
+            TimeUnit.SECONDS.sleep(1);
             app.logEvent(EventType.ERROR,"Some event for 4");
+            TimeUnit.SECONDS.sleep(1);
             app.logEvent(null,"Some event for 5");
+            TimeUnit.SECONDS.sleep(1);
             app.logEvent(null,"Some event for 6");
+            TimeUnit.SECONDS.sleep(1);
             app.logEvent(null,"Some event for 7");
+            TimeUnit.SECONDS.sleep(1);
             app.logEvent(null,"Some event for 8");
+            TimeUnit.SECONDS.sleep(2);
             app.logEvent(EventType.INFO,"Some event for 9");
+            TimeUnit.SECONDS.sleep(1);
             app.logEvent(EventType.INFO,"Some event for 10");
         }catch (IOException e){
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
+        ctx.close();
 
     }
 }
